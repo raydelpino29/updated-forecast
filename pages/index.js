@@ -15,8 +15,8 @@ export default class Page extends Component {
           <link href="/static/index.css" rel="stylesheet" />
           <link rel='shortcut icon' type='image/x-icon' href='/static/favicon.ico' />
         </Head>
-        <SearchInput />
         <CurrentWeather />
+        <SearchInput />
         <style jsx global>{`
           body {
             margin: 0;

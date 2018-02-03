@@ -32,27 +32,62 @@ class CurrentWeather extends React.Component {
   parseWeather(weather) {
     let current = {};
     Object.keys(weather.data.main).forEach((item) => {
-      if (item === "temp" || item === "pressure" || item === "humidity") {
+      if (item === "humidity") {
         current[item] = weather.data.main[item];
+      } else if (item === "temp" || item === "temp_min" || item === "temp_max") {
+        const temp = Math.floor((weather.data.main[item] * 9/5) - 459.67);
+        current[item] = temp;
       }
     });
     this.setState({ current });
   }
 
   render() {
-    debugger
     return (
-      <section className="currentWeather">
-        <h1>{ this.state.current.pressure }</h1>
-        <p>{ this.state.current.temp }</p>
-        <p>{ this.state.current.humidity }</p>
+      <article className="currentWeather">
+      <section>
+        <h3>Currently:</h3>
+        <p>{ this.state.current.temp }</p><small>F</small>
+      </section>
+      <section>
+        <h3>High Of:</h3>
+        <p>{ this.state.current.temp_max }</p><small>F</small>
+      </section>
+      <section>
+        <h3>Low Of:</h3>
+        <p>{ this.state.current.temp_min }</p><small>F</small>
+      </section>
         <style jsx>{`
+          article {
+            border-left: 1px solid white;
+            border-bottom: 1px solid white;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            right: 0;
+          }
           section {
-            border: 1px solid black;
+            display flex;
+            margin-right: 10px;
+          }
+          h3, p, small {
+            color: white;
+          }
+          p {
+            margin: 0;
+            font-size: 35px;
             position: relative;
+            font-family: Tiempos;
+          }
+          h3 {
+            margin: 12px 5px 5px;
+            font-weight: 100;
+          }
+          small {
+            margin-top: 18px;
           }
         `}</style>
-      </section>
+      </article>
     )
   }
 }
