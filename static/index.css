@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'Tiempos';
+  src: url('./fonts/TiemposHeadline-Semibold.woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Apercu';
+    src: url('./fonts/apercubolditalicpro.woff2');
+    src: url('./fonts/apercuboldpro.woff2') format('woff2');
+    src: url('./fonts/apercumediumitalicpro.woff2') format('woff2');
+    src: url('./fonts/apercuregularitalicpro.woff2') format('woff2');
+    src: url('./fonts/apercuregularpro.woff2') format('woff2');
+    src: url('./fonts/apercumediumpro.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}

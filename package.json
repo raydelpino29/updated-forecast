@@ -1,0 +1,26 @@
+{
+  "name": "take-home-project",
+  "version": "1.0.0",
+  "description": "Take-home project for front end candidates",
+  "main": "index.js",
+  "author": "Raymond Delpino <raydelpino29@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "babel-polyfill": "^6.26.0",
+    "css-loader": "^0.28.7",
+    "jquery": "^3.2.1",
+    "next": "^4.2.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "style-loader": "^0.19.1"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "file-loader": "^1.1.6"
+  }
+}
