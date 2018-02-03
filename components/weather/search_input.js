@@ -88,7 +88,7 @@ class SearchInput extends Component {
       scrollTop: $("#forecast").offset().top
     }, 1000);
   }
-
+// function to move to forecast div on click
   render() {
     return (
       <div>
