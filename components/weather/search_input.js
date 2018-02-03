@@ -6,15 +6,20 @@ import $ from 'jquery';
 class SearchInput extends Component {
   constructor(props) {
     super(props);
-    this.state = {zip: "", forecast: {}, loading: false, error: ""};
+    this.state = {zip: "", forecast: {}, loading: false, error: "", option: "5 Day" };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.parseFiveDays = this.parseFiveDays.bind(this);
+    this.handleDropdown = this.handleDropdown.bind(this);
   }
 
   handleChange (e) {
     this.setState({ zip: e.target.value });
+  }
+
+  handleDropdown (e) {
+    this.setState({ option: e.target.value });
   }
 
   parseFiveDays (date, monthLength) {
@@ -92,6 +97,10 @@ class SearchInput extends Component {
               <h1>Weather app</h1>
               <p>Type in your zip code to see how awful the weather is in your area this week.</p>
               <input placeholder="000000" onChange={ this.handleChange } value={ this.state.zip } />
+              <select onChange={ this.handleDropdown }>
+                <option>5 Day</option>
+                <option>16 Day</option>
+              </select>
               <img onClick={ this.handleClick } src="https://s3.us-east-2.amazonaws.com/icons123/downarrow+(1).png" />
           </form>
         </article>
