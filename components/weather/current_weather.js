@@ -5,17 +5,21 @@ class CurrentWeather extends React.Component {
   constructor (props) {
     super(props);
     this.fetchWeather = this.fetchWeather.bind(this);
-    this.state = { current: {} };
+    this.state = { current: {}, error: null, loading: true };
   }
 
   componentDidMount() {
+    let indicator = false;
     navigator.geolocation.getCurrentPosition((position) => {
+      indicator = true;
       let lat;
       let long;
       [lat, long] = [position.coords.latitude, position.coords.longitude];
       this.fetchWeather(lat,long);
     });
-
+    if (indicator) {
+      this.setState({ error: "Couldn't find your location." });
+    }
   }
 
   fetchWeather(lat, long) {
@@ -25,7 +29,7 @@ class CurrentWeather extends React.Component {
     axios.get(fullURL).then((weather) => {
       this.parseWeather(weather);
     }, (error) => {
-
+      this.setState({ error: "Couldn't find your location." });
     });
   }
 
@@ -43,52 +47,67 @@ class CurrentWeather extends React.Component {
   }
 
   render() {
-    return (
-      <article className="currentWeather">
-      <section>
-        <h3>Currently:</h3>
-        <p>{ this.state.current.temp }</p><small>F</small>
-      </section>
-      <section>
-        <h3>High Of:</h3>
-        <p>{ this.state.current.temp_max }</p><small>F</small>
-      </section>
-      <section>
-        <h3>Low Of:</h3>
-        <p>{ this.state.current.temp_min }</p><small>F</small>
-      </section>
-        <style jsx>{`
-          article {
-            border-left: 1px solid white;
-            border-bottom: 1px solid white;
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            right: 0;
-          }
-          section {
-            display flex;
-            margin-right: 10px;
-          }
-          h3, p, small {
-            color: white;
-          }
-          p {
-            margin: 0;
-            font-size: 35px;
-            position: relative;
-            font-family: Tiempos;
-          }
-          h3 {
-            margin: 12px 5px 5px;
-            font-weight: 100;
-          }
-          small {
-            margin-top: 18px;
-          }
-        `}</style>
-      </article>
-    )
+    if (this.state.error) {
+      return (
+        <article>
+          <p>{ this.state.error }</p>
+        </article>
+      );
+    } else {
+      return (
+        <article>
+          <section>
+          <h3>Currently:</h3>
+          <p>{ this.state.current.temp }</p><small>F</small>
+          </section>
+          <section>
+          <h3>High Of:</h3>
+          <p>{ this.state.current.temp_max }</p><small>F</small>
+          </section>
+          <section>
+          <h3>Low Of:</h3>
+          <p>{ this.state.current.temp_min }</p><small>F</small>
+          </section>
+          <style jsx>{`
+            article {
+              position: absolute;
+              display: flex;
+              flex-direction: row;
+              left: 0;
+              margin-left: 5%;
+            }
+            section {
+              display: flex;
+              margin-right: 10px;
+            }
+            h3, p, small {
+              color: white;
+            }
+            p {
+              margin: 0;
+              margin-top: 13px;
+              margin-right: 2px;
+              font-size: 17px;
+              position: relative;
+              font-family: Tiempos;
+              letter-spacing: 1px;
+            }
+            h3 {
+              margin: 11px 5px 5px;
+              margin-left: 0;
+              font-size: 17px;
+              font-weight: 100;
+              font-family: Apercu;
+            }
+            small {
+              margin-top: 14px;
+              font-family: Apercu;
+            }
+            `}</style>
+          </article>
+        )
+
+    }
   }
 }
 
