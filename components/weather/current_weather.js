@@ -5,21 +5,18 @@ class CurrentWeather extends React.Component {
   constructor (props) {
     super(props);
     this.fetchWeather = this.fetchWeather.bind(this);
-    this.state = { current: {}, error: null, loading: true };
+    this.state = { current: null, loading: true, error: null };
   }
 
   componentDidMount() {
-    let indicator = false;
     navigator.geolocation.getCurrentPosition((position) => {
-      indicator = true;
       let lat;
       let long;
       [lat, long] = [position.coords.latitude, position.coords.longitude];
       this.fetchWeather(lat,long);
+    }, (error) => {
+      this.setState({ error: "Couldn't obtain location.", loading: false });
     });
-    if (indicator) {
-      this.setState({ error: "Couldn't find your location." });
-    }
   }
 
   fetchWeather(lat, long) {
@@ -28,8 +25,6 @@ class CurrentWeather extends React.Component {
     const fullURL = baseURL + pos + "&appid=670e6d2b31b62201dc47b79f5a87b500";
     axios.get(fullURL).then((weather) => {
       this.parseWeather(weather);
-    }, (error) => {
-      this.setState({ error: "Couldn't find your location." });
     });
   }
 
@@ -43,30 +38,50 @@ class CurrentWeather extends React.Component {
         current[item] = temp;
       }
     });
-    this.setState({ current });
+    this.setState({ current, loading: false });
   }
 
   render() {
-    if (this.state.error) {
+    if (this.state.loading) {
       return (
-        <article>
-          <p>{ this.state.error }</p>
-        </article>
+        <p className="status">Finding location...
+        <style jsx>{`
+        p {
+          position: absolute;
+          color: white;
+          font-family: Apercu;
+          margin-left: 5%;
+        }
+        `}</style>
+        </p>
+      );
+    } else if (this.state.error) {
+      return (
+        <p className="status">{ this.state.error }
+        <style jsx>{`
+        p {
+          position: absolute;
+          color: white;
+          font-family: Apercu;
+          margin-left: 5%;
+        }
+        `}</style>
+        </p>
       );
     } else {
       return (
         <article>
           <section>
-          <h3>Currently:</h3>
-          <p>{ this.state.current.temp }</p><small>F</small>
+            <h3>Currently:</h3>
+            <p>{ this.state.current.temp }</p><small>F</small>
           </section>
           <section>
-          <h3>High Of:</h3>
-          <p>{ this.state.current.temp_max }</p><small>F</small>
+            <h3>High Of:</h3>
+            <p>{ this.state.current.temp_max }</p><small>F</small>
           </section>
           <section>
-          <h3>Low Of:</h3>
-          <p>{ this.state.current.temp_min }</p><small>F</small>
+            <h3>Low Of:</h3>
+            <p>{ this.state.current.temp_min }</p><small>F</small>
           </section>
           <style jsx>{`
             article {
@@ -75,6 +90,7 @@ class CurrentWeather extends React.Component {
               flex-direction: row;
               left: 0;
               margin-left: 5%;
+              opacity: 0.9;
             }
             section {
               display: flex;
