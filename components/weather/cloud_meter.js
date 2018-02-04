@@ -14,7 +14,7 @@ const CloudMeter = ({ cloudiness }) => {
           margin: 0 auto;
         }
         small {
-          font-family: Apercu;
+          font-family: Apercu, sans-serif;
           color: #fff;
         }
         .outer {
