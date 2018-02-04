@@ -15,12 +15,11 @@ const WeatherItem = ({ forecast, day }) => {
         div {
           border: 1px solid #e7e7e7;
           text-align: center;
-          width: 15vw;
+          width: 17vw;
         }
         section {
           border-top: 1px solid #e7e7e7;
-          padding-top: 20px;
-          padding-bottom: 15px;
+          padding-top: 18px;
         }
         p, small {
           font-family: "Apercu", sans-serif;
@@ -34,7 +33,6 @@ const WeatherItem = ({ forecast, day }) => {
         }
         section p {
           font-family: "Tiempos", serif;
-          font-weight: 600;
           font-size: 6vw;
           display: inline;
           letter-spacing: 4px;
