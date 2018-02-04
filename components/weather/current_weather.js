@@ -31,9 +31,7 @@ class CurrentWeather extends React.Component {
   parseWeather(weather) {
     let current = {};
     Object.keys(weather.data.main).forEach((item) => {
-      if (item === "humidity") {
-        current[item] = weather.data.main[item];
-      } else if (item === "temp" || item === "temp_min" || item === "temp_max") {
+       if (item === "temp" || item === "temp_min" || item === "temp_max") {
         const temp = Math.floor((weather.data.main[item] * 9/5) - 459.67);
         current[item] = temp;
       }

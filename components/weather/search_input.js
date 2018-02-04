@@ -56,9 +56,8 @@ class SearchInput extends Component {
         return;
       } else if (fiveDays.includes(dayNumber)) { // otherwise if this day is in our fiveDays array, add the forecast to our hash
         const temp = Math.floor((info.main.temp * 9/5) - 459.67); // convert temp in Kelvin to Fahrenheit
-        forecast[weekDay] = temp;
+        forecast[weekDay] = { temp, "cloudiness": info.clouds.all } ;
       }
-
     });
     this.setState({ forecast, loading: false }); // trigger a render that stops the loading spinner, and sets local state with forecast
   }

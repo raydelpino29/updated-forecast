@@ -1,12 +1,14 @@
 import { Component } from 'react';
 
-const CloudMeter = ({ humidity }) => {
+const CloudMeter = ({ cloudiness }) => {
+  debugger
   return (
     <section>
-      <style jsx<{`
+      <style jsx>{`
           section {
-            width: ${humidity};
+            width: ${cloudiness}%;
             height: 5px;
+            background: black;
           }
         `}
       </style>

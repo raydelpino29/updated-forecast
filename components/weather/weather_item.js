@@ -2,14 +2,14 @@ import { Component } from 'react';
 import CloudMeter from './cloud_meter';
 
 const WeatherItem = ({ forecast, day }) => {
-  const weekDays = {"Mon":"Monday", "Tue": "Tuesday", "Wed":"Wednesday",
-          "Thu":"Thursday", "Fri":"Friday", "Sat":"Saturday", "Sun":"Sunday"};
+  const weekDays = { "Mon":"Monday", "Tue": "Tuesday", "Wed":"Wednesday",
+          "Thu":"Thursday", "Fri":"Friday", "Sat":"Saturday", "Sun":"Sunday" };
   return (
     <div>
       <p className="day">{ weekDays[day] }</p>
       <section>
-        <p>{ forecast[day] }</p><small>F</small>
-        <CloudMeter />
+        <p>{ forecast[day].temp }</p><small>F</small>
+        <CloudMeter cloudiness={ forecast[day].cloudiness } />
       </section>
       <style jsx>{`
         div {
