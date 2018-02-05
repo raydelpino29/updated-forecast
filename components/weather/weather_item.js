@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import CloudMeter from './cloud_meter';
+import WindItem from './wind_item';
 
 const WeatherItem = ({ forecast, day }) => {
   const weekDays = { "Mon":"Monday", "Tue": "Tuesday", "Wed":"Wednesday",
@@ -7,15 +8,18 @@ const WeatherItem = ({ forecast, day }) => {
   return (
     <div>
       <p className="day">{ weekDays[day] }</p>
-      <section>
-        <p>{ forecast[day].temp }</p><small>F</small>
+      <section className="cloud-container">
+        <p>{ forecast[day].tempForDay }</p><small>F</small>
         <CloudMeter cloudiness={ forecast[day].cloudiness } />
+      </section>
+      <section>
+        <WindItem wind={ forecast[day].wind } />
       </section>
       <style jsx>{`
         div {
           border: 1px solid #e7e7e7;
           text-align: center;
-          width: 17vw;
+          width: 15vw;
         }
         section {
           border-top: 1px solid #e7e7e7;
@@ -36,6 +40,9 @@ const WeatherItem = ({ forecast, day }) => {
           font-size: 6vw;
           display: inline;
           letter-spacing: 4px;
+        }
+        .cloud-container {
+          margin-bottom: 18px;
         }
         @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
           section {

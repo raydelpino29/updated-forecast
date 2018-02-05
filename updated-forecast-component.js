@@ -10,34 +10,65 @@ class SearchInput extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.parseFiveDays = this.parseFiveDays.bind(this);
   }
 
   handleChange (e) {
     this.setState({ zip: e.target.value });
   }
 
-  getForecast(weather) {
-
-    let alreadyExtractedWeatherDays = new Set();
-
-    return Object.values(weather.data.list).reduce((acc, curr) => {
-      const dayOfMonth = new Date(curr.dt*1000).toString().split(" ")[0];
-      if (alreadyExtractedWeatherDays.has(dayOfMonth)) {
-        return acc;
+  parseFiveDays (date, monthLength) {
+    let fiveDays = [];
+    let count = 0;
+    while (fiveDays.length < 5) {
+      const day = parseInt(date[2]);
+      if ((day + count) > monthLength) {
+        fiveDays.push((day + count) % monthLength); // account for end of the month, when days will start at 1 again
       } else {
-        const tempForDay = Math.floor((curr.main.temp * 9/5) - 459.67);
-        acc[dayOfMonth] = { tempForDay, "cloudiness": curr.clouds.all, "wind": curr.wind };
-        alreadyExtractedWeatherDays.add(dayOfMonth);
-        return acc;
+        fiveDays.push(day + count);
       }
-    }, {});
+      count++;
+    }
+    return fiveDays;
+  }
 
+  getCurrentMonthLength() {
+    const date = new Date(weather.data.list[0].dt*1000).toString().split(" "); // grab first available day for forecast (current day or next if it's late in the day)
+    // ex: ["Sat", "Sep", "09", "2017", "00:00:00", "GMT-0400", "(EDT)"]
+    const thirtyMonths = ["Sep", "Apr", "Jun", "Nov"]; // months with 30 days
+    if (date[1] === "Feb") {
+       return  (parseInt(date[3]) % 4 === 0 ? 29 : 28); // if it's february, then monthLength = 28, unless it's a leap year (monthLength = 29)
+    } else if (thirtyMonths.includes(date[1])) {
+      return 30; // monthLength = 30 days if it's in our thirtyMonths array
+    } else {
+      return 31;
+    }
+  }
+
+  getForecast(dates) {
+    let forecast = {}; // create a hash of the temperature and day { day: temp }
+    Object.values(weather.data.list).forEach((info) => {
+      const date = new Date(info.dt*1000).toString().split(" ");
+      const dayNumber = parseInt(date[2]);
+      const weekDay = date[0];
+
+      if (forecast[dayNumber]) { // immediately return if we have already gotten forecast for this day
+        return;
+      } else if (dates.includes(dayNumber)) { // otherwise if this day is in our fiveDays array, add the forecast to our hash
+        const temp = Math.floor((info.main.temp * 9/5) - 459.67); // convert temp in Kelvin to Fahrenheit
+        forecast[weekDay] = { temp, "cloudiness": info.clouds.all, "wind": info.wind } ;
+      }
+    });
+    return forecast;
   }
 
   parseForecast (weather) {
-    const date = new Date(weather.data.list[0].dt*1000).toString().split(" "); // grab first available day for forecast (current day or next if it's late in the day)
 
-    const forecast = this.getForecast(weather);
+    const monthLength = this.getCurrentMonthLength();
+
+    const datesOfNextFiveDays = this.parseFiveDays(date, monthLength);  // create an array of the five dates we want the weather for
+
+    const forecast = this.getForecast(datesOfNextFiveDays);
 
     this.setState({ forecast, loading: false }); // trigger a render that stops the loading spinner, and sets local state with forecast
   }
@@ -49,6 +80,7 @@ class SearchInput extends Component {
     const zip = `${this.state.zip}`;
     const fullUrl = baseUrl + zip + "&appid=670e6d2b31b62201dc47b79f5a87b500";
     axios.get(fullUrl).then((weather) => {
+      console.log(weather);
       this.parseForecast(weather);
     }, (error) => {
       this.setState({error: "This is not a valid US zip code. Please enter your code again.",
