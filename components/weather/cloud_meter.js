@@ -22,7 +22,7 @@ const CloudMeter = ({ cloudiness }) => {
           background: gray;
         }
         .outer div {
-          width: ${cloudiness * 0.9}%;
+          width: ${cloudiness}%;
           height: 5px;
           background: #d34c34;
           margin-left: 0;

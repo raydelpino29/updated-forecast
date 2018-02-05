@@ -22,7 +22,7 @@ class SearchInput extends Component {
 
     return Object.values(weather.data.list).reduce((acc, curr) => {
       const dayOfMonth = new Date(curr.dt*1000).toString().split(" ")[0];
-      if (alreadyExtractedWeatherDays.has(dayOfMonth)) {
+      if (alreadyExtractedWeatherDays.has(dayOfMonth) || alreadyExtractedWeatherDays.size === 5) {
         return acc;
       } else {
         const tempForDay = Math.floor((curr.main.temp * 9/5) - 459.67);
@@ -31,12 +31,9 @@ class SearchInput extends Component {
         return acc;
       }
     }, {});
-
   }
 
   parseForecast (weather) {
-    const date = new Date(weather.data.list[0].dt*1000).toString().split(" "); // grab first available day for forecast (current day or next if it's late in the day)
-
     const forecast = this.getForecast(weather);
 
     this.setState({ forecast, loading: false }); // trigger a render that stops the loading spinner, and sets local state with forecast
