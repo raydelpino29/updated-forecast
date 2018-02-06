@@ -18,16 +18,16 @@ class SearchInput extends Component {
 
   getForecast(weather) {
 
-    let alreadyExtractedWeatherDays = new Set();
+    let daysAccountedFor = new Set();
 
     return Object.values(weather.data.list).reduce((acc, curr) => {
       const dayOfMonth = new Date(curr.dt*1000).toString().split(" ")[0];
-      if (alreadyExtractedWeatherDays.has(dayOfMonth) || alreadyExtractedWeatherDays.size === 5) {
+      if (daysAccountedFor.has(dayOfMonth) || daysAccountedFor.size === 5) {
         return acc;
       } else {
         const tempForDay = Math.floor((curr.main.temp * 9/5) - 459.67);
         acc[dayOfMonth] = { tempForDay, "cloudiness": curr.clouds.all, "wind": curr.wind };
-        alreadyExtractedWeatherDays.add(dayOfMonth);
+        daysAccountedFor.add(dayOfMonth);
         return acc;
       }
     }, {});
